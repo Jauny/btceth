@@ -1,0 +1,73 @@
+<html>
+<head>
+  <title>BTC AND ETH PRICES</title>
+  <link rel="shortcut icon" type="image/png" href="https://files.coinmarketcap.com/static/img/coins/16x16/goldcoin.png">
+  <style>
+    table {
+      margin: auto;
+      margin-top: 10%;
+    }
+    td {
+      vertical-align: middle;
+    }
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 10px;
+        text-align: center;
+    }
+    h1, h2 {
+      margin: 0;
+    }
+    #timer {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="timer">15</div>
+  <div id="content"></div id="content">
+  <script type="text/javascript">
+    const injectData = function({BTC, ETH}) {
+      const html = `
+        <table>
+          <tr>
+            <td colspan="2"><h1>BTC</h1></td>
+            <td colspan="2"><h1>ETH</h1></td>
+          </tr>
+          <tr>
+            <td><h2>&dollar;${BTC.USD}</h2></td>
+            <td>&euro;${BTC.EUR}</td>
+            <td><h2>&dollar;${ETH.USD}</h2></td>
+            <td>&euro;${ETH.EUR}</td>
+          </tr>
+        </table>
+      `;
+      document.getElementById("content").innerHTML = html;
+    };
+
+    const fetchPrices = async function() {
+      const response = await fetch("https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH&tsyms=USD,EUR");
+      const json = await response.json();
+      injectData(json);
+    };
+
+    const updateTimeleft = function(timeleft) {
+      document.getElementById("timer").innerHTML = timeleft;
+    };
+
+    let timeleft = 15;
+    window.setInterval(function() {
+      timeleft--
+      updateTimeleft(timeleft);
+      if (timeleft === 0) {
+        fetchPrices();
+        timeleft = 16;
+      }
+    }, 1000);
+    fetchPrices();
+  </script>
+</body>
+</html>
