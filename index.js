@@ -1,15 +1,21 @@
-const injectData = function({BTC, ETH}) {
+const btcurl = 'https://api.coinmarketcap.com/v1/ticker/bitcoin/'
+const bchurl = 'https://api.coinmarketcap.com/v1/ticker/bitcoin-cash/'
+const ethurl = 'https://api.coinmarketcap.com/v1/ticker/ethereum/'
+
+const injectData = function(coins) {
+  let heads = '';
+  let values = '';
+  for (coin of coins) {
+    heads += `<td><h1>${coin.symbol}</h1></td>`
+    values += `<td><h2>${Math.floor(coin.price_usd)}</h2></td>`
+  }
   const html = `
     <table>
       <tr>
-        <td colspan="2"><h1>BTC</h1></td>
-        <td colspan="2"><h1>ETH</h1></td>
+        ${heads}
       </tr>
       <tr>
-        <td><h2>&dollar;${BTC.USD}</h2></td>
-        <td>&euro;${BTC.EUR}</td>
-        <td><h2>&dollar;${ETH.USD}</h2></td>
-        <td>&euro;${ETH.EUR}</td>
+        ${values}
       </tr>
     </table>
   `;
@@ -17,8 +23,12 @@ const injectData = function({BTC, ETH}) {
 };
 
 const fetchPrices = async function() {
-  const response = await fetch("https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH&tsyms=USD,EUR");
-  const json = await response.json();
+  const responses = [await fetch(btcurl), await fetch(bchurl), await fetch(ethurl)]
+  let json = []
+  for (let resp of responses) {
+    const body = await resp.json()
+    json = json.concat(body)
+  }
   injectData(json);
 };
 
