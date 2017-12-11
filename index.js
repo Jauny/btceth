@@ -1,14 +1,16 @@
-const btcurl = 'https://api.coinmarketcap.com/v1/ticker/bitcoin/'
-const bchurl = 'https://api.coinmarketcap.com/v1/ticker/bitcoin-cash/'
-const ltcurl = 'https://api.coinmarketcap.com/v1/ticker/litecoin/'
-const ethurl = 'https://api.coinmarketcap.com/v1/ticker/ethereum/'
+const btcurl = 'https://api.coinmarketcap.com/v1/ticker/bitcoin/?convert=EUR'
+const bchurl = 'https://api.coinmarketcap.com/v1/ticker/bitcoin-cash/?convert=EUR'
+const ltcurl = 'https://api.coinmarketcap.com/v1/ticker/litecoin/?convert=EUR'
+const ethurl = 'https://api.coinmarketcap.com/v1/ticker/ethereum/?convert=EUR'
 
 const injectData = function(coins) {
   let heads = '';
-  let values = '';
+  let usds = '';
+  let euros = '';
   for (coin of coins) {
     heads += `<td><h1>${coin.symbol}</h1></td>`
-    values += `<td><h2>${Math.floor(coin.price_usd)}</h2></td>`
+    usds += `<td><h2>$${Math.floor(coin.price_usd)}</h2></td>`
+    euros += `<td><h2>&euro;${Math.floor(coin.price_eur)}</h2></td>`
   }
   const html = `
     <table>
@@ -16,7 +18,10 @@ const injectData = function(coins) {
         ${heads}
       </tr>
       <tr>
-        ${values}
+        ${usds}
+      </tr>
+      <tr>
+        ${euros}
       </tr>
     </table>
   `;
