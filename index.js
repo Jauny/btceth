@@ -1,5 +1,6 @@
 const btcurl = 'https://api.coinmarketcap.com/v1/ticker/bitcoin/'
 const bchurl = 'https://api.coinmarketcap.com/v1/ticker/bitcoin-cash/'
+const ltcurl = 'https://api.coinmarketcap.com/v1/ticker/litecoin/'
 const ethurl = 'https://api.coinmarketcap.com/v1/ticker/ethereum/'
 
 const injectData = function(coins) {
@@ -23,7 +24,7 @@ const injectData = function(coins) {
 };
 
 const fetchPrices = async function() {
-  const responses = [await fetch(btcurl), await fetch(bchurl), await fetch(ethurl)]
+  const responses = [await fetch(btcurl), await fetch(bchurl), await fetch(ethurl), await fetch(ltcurl)]
   let json = []
   for (let resp of responses) {
     const body = await resp.json()
