@@ -1,7 +1,10 @@
-const btcurl = 'https://api.coinmarketcap.com/v1/ticker/bitcoin/?convert=EUR'
-const bchurl = 'https://api.coinmarketcap.com/v1/ticker/bitcoin-cash/?convert=EUR'
-const ltcurl = 'https://api.coinmarketcap.com/v1/ticker/litecoin/?convert=EUR'
-const ethurl = 'https://api.coinmarketcap.com/v1/ticker/ethereum/?convert=EUR'
+const btceur = 'https://api.gdax.com/products/BTC-EUR/ticker';
+const btcusd = 'https://api.gdax.com/products/BTC-USD/ticker';
+const ltceur = 'https://api.gdax.com/products/LTC-EUR/ticker';
+const ltcusd = 'https://api.gdax.com/products/LTC-USD/ticker';
+const etheur = 'https://api.gdax.com/products/ETH-EUR/ticker';
+const ethusd = 'https://api.gdax.com/products/ETH-USD/ticker';
+const bchusd = 'https://api.gdax.com/products/BCH-USD/ticker';
 
 const injectData = function(coins) {
   let heads = '';
@@ -29,12 +32,23 @@ const injectData = function(coins) {
 };
 
 const fetchPrices = async function() {
-  const responses = [await fetch(btcurl), await fetch(bchurl), await fetch(ethurl), await fetch(ltcurl)]
-  let json = []
-  for (let resp of responses) {
-    const body = await resp.json()
-    json = json.concat(body)
-  }
+  const json = [{
+    symbol: 'BTC',
+    price_usd: (await (await fetch(btcusd)).json()).price,
+    price_eur: (await (await fetch(btceur)).json()).price
+  }, {
+    symbol: 'BCH',
+    price_usd: (await (await fetch(bchusd)).json()).price,
+    price_eur: 0
+  }, {
+    symbol: 'ETH',
+    price_usd: (await (await fetch(ethusd)).json()).price,
+    price_eur: (await (await fetch(etheur)).json()).price
+  }, {
+    symbol: 'LTC',
+    price_usd: (await (await fetch(ltcusd)).json()).price,
+    price_eur: (await (await fetch(ltceur)).json()).price
+  }];
   injectData(json);
 };
 
