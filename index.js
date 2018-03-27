@@ -5,6 +5,7 @@ const ltcusd = 'https://api.gdax.com/products/LTC-USD/ticker';
 const etheur = 'https://api.gdax.com/products/ETH-EUR/ticker';
 const ethusd = 'https://api.gdax.com/products/ETH-USD/ticker';
 const bchusd = 'https://api.gdax.com/products/BCH-USD/ticker';
+const bcheur = 'https://api.gdax.com/products/BCH-EUR/ticker';
 
 const injectData = function(coins) {
   let heads = '';
@@ -39,7 +40,7 @@ const fetchPrices = async function() {
   }, {
     symbol: 'BCH',
     price_usd: (await (await fetch(bchusd)).json()).price,
-    price_eur: 0
+    price_eur: (await (await fetch(bcheur)).json()).price
   }, {
     symbol: 'ETH',
     price_usd: (await (await fetch(ethusd)).json()).price,
